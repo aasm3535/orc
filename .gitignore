@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Source maps
+*.js.map
+*.d.ts.map
+*.d.ts
+
+# User config (contains model keys/preferences)
+orc.yml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp / audit reports
+ARCHITECTURAL_AUDIT_REPORT.md
