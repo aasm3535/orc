@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: node18-linux-x64
+            platform: linux-x64
+            binary: orc-linux-x64
+          - os: macos-latest
+            target: node18-macos-x64
+            platform: macos-x64
+            binary: orc-macos-x64
+          - os: windows-latest
+            target: node18-win-x64
+            platform: win-x64
+            binary: orc-win-x64.exe
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Package binary
+        run: npx @yao-pkg/pkg dist/index.js --target ${{ matrix.target }} --output release/orc --no-bytecode --public
+        shell: bash
+
+      - name: Rename binary
+        run: |
+          mkdir -p release
+          if [ "${{ matrix.platform }}" = "win-x64" ]; then
+            mv release/orc.exe release/${{ matrix.binary }} 2>/dev/null || true
+          else
+            mv release/orc release/${{ matrix.binary }} 2>/dev/null || true
+            chmod +x release/${{ matrix.binary }}
+          fi
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.binary }}
+          path: release/${{ matrix.binary }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: release/
+          merge-multiple: true
+
+      - name: List binaries
+        run: ls -lh release/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/orc-*
+          generate_release_notes: true
+          draft: false

@@ -24,3 +24,6 @@ Thumbs.db
 
 # Temp / audit reports
 ARCHITECTURAL_AUDIT_REPORT.md
+
+# Pkg binaries
+release/

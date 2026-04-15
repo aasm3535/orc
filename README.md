@@ -55,6 +55,37 @@ Each cycle is a full loop. On the first cycle the Manager plans. On subsequent
 cycles the Manager gets the review feedback and gives **specific fix instructions** —
 developers don't redo work from scratch, they only fix what's broken.
 
+## Install
+
+### One-liner (Linux / macOS)
+
+```bash
+curl -fsSL https://github.com/aasm3535/orc/raw/master/install.sh | sh
+```
+
+### PowerShell (Windows)
+
+```powershell
+irm https://github.com/aasm3535/orc/raw/master/install.ps1 | iex
+```
+
+### npm
+
+```bash
+npm install -g orc
+```
+
+### From source
+
+```bash
+git clone https://github.com/aasm3535/orc.git
+cd orc
+npm install && npm run build
+node dist/index.js run "your task"
+```
+
+---
+
 ## Quick Start
 
 ```bash

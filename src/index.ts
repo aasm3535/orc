@@ -21,7 +21,7 @@ const program = new Command();
 program
   .name("orc")
   .description("🐙 Orc - Multi-Agent Swarm Orchestrator")
-  .version("0.1.0");
+  .version(require("../package.json").version || "0.1.0");
 
 program
   .command("init")
